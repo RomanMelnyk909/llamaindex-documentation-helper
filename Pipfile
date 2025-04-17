@@ -1,0 +1,19 @@
+[[source]]
+url = "https://pypi.org/simple"
+verify_ssl = true
+name = "pypi"
+
+[packages]
+openai = "*"
+pinecone-client = "*"
+python-dotenv = "*"
+requests = "*"
+beautifulsoup4 = "*"
+llama-index = {extras = ["pinecone"], version = "*"}
+llama-index-vector-stores-pinecone = "*"
+black = "*"
+
+[dev-packages]
+
+[requires]
+python_version = "3.12"
