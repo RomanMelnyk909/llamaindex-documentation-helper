@@ -12,6 +12,7 @@ beautifulsoup4 = "*"
 llama-index = {extras = ["pinecone"], version = "*"}
 llama-index-vector-stores-pinecone = "*"
 black = "*"
+git-filter-repo = "*"
 
 [dev-packages]
 
