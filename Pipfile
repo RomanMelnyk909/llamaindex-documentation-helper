@@ -13,6 +13,7 @@ llama-index = {extras = ["pinecone"], version = "*"}
 llama-index-vector-stores-pinecone = "*"
 black = "*"
 git-filter-repo = "*"
+unstructured = "*"
 
 [dev-packages]
 
