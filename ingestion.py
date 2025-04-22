@@ -19,6 +19,8 @@ from pathlib import Path
 load_dotenv()
 pc = Pinecone(api_key=os.environ["PINECONE_API_KEY"])
 
+# This code reed data from documents, divides it to small chunks, makes embeddings from this chunks an push it to vector db
+
 
 if __name__ == "__main__":
     input_dir = Path("./llamaindex-docs/")
@@ -31,7 +33,7 @@ if __name__ == "__main__":
     for html_file in html_files:
         document = loader.load_data(unstructured_kwargs={"filename": str(html_file)})
         documents.extend(document)
-        
+
     Settings.llm = OpenAI(model="gpt-3.5-turbo", temperature=0)
     Settings.embed_model = OpenAIEmbedding(
         model="text-embedding-ada-002", embed_batch_size=100
@@ -40,7 +42,7 @@ if __name__ == "__main__":
         chunk_size=500, chunk_overlap=20
     )
 
-    pc = Pinecone(api_key=os.environ['PINECONE_API_KEY'])
+    pc = Pinecone(api_key=os.environ["PINECONE_API_KEY"])
 
     index_name = "llamaindex-documentation-helper"
     pinecone_index = pc.Index("llamaindex-documentation-helper")
@@ -55,5 +57,5 @@ if __name__ == "__main__":
     )
 
     print(f"{os.environ['PINECONE_ENVIRONMENT']}")
-  
+
     pass
