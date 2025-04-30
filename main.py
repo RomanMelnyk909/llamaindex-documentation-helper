@@ -4,6 +4,7 @@ from pinecone import Pinecone
 from llama_index.core import VectorStoreIndex, Settings
 from llama_index.vector_stores.pinecone import PineconeVectorStore
 from llama_index.core.callbacks import LlamaDebugHandler, CallbackManager
+from llama_index.core.postprocessor import SentenceEmbeddingOptimizer
 
 import streamlit as st
 
@@ -25,14 +26,6 @@ def get_index() -> VectorStoreIndex:
     Settings.callback_manager = CallbackManager(handlers=[llama_debug])
 
     return VectorStoreIndex.from_vector_store(vector_store=vector_store)
-
-    # query = "What is Llamaindex query engine?"
-    # query_engine = index.as_query_engine()
-    # responce = query_engine.query(query)
-
-    # print(responce)
-
-    # print("File was run successfully....")
 
 
 index = get_index()
@@ -56,16 +49,13 @@ if "messages" not in st.session_state.keys():
     st.session_state.messages = [
         {
             "role": "assistant",
-            "content": "Ask me a question about LlamaIndex open source python library?"
+            "content": "Ask me a question about LlamaIndex open source python library?",
         }
     ]
 
 
 if prompt := st.chat_input("Your question"):
-    st.session_state.messages.append({ 
-        "role": "user",
-        "content": prompt
-     })
+    st.session_state.messages.append({"role": "user", "content": prompt})
 
 for message in st.session_state.messages:
     with st.chat_message(message["role"]):
@@ -76,8 +66,10 @@ if st.session_state.messages[-1]["role"] != "assistant":
         with st.spinner("Thinking..."):
             responce = st.session_state.chat_engine.chat(message=prompt)
             st.write(responce.response)
-            message = {
-                "role": "assistant",
-                "content": responce.response
-            }
+            nodes = [node for node in responce.source_nodes]
+            for col, node, i in zip(st.columns(len(nodes)), nodes, range(len(nodes))):
+                with col:
+                    st.header(f"Source node {i+1}: csore= {node.score}")
+                    st.write(node.text)
+            message = {"role": "assistant", "content": responce.response}
             st.session_state.messages.append(message)
