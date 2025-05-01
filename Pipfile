@@ -15,6 +15,7 @@ black = "*"
 git-filter-repo = "*"
 unstructured = "*"
 streamlit = "*"
+autogen = "*"
 
 [dev-packages]
 

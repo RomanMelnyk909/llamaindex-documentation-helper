@@ -15,9 +15,7 @@ if __name__ == "__main__":
     pinecone_index = pc.Index("llanaindex-resume-pdf-helper")
     vector_store = PineconeVectorStore(pinecone_index=pinecone_index)
 
-    index = VectorStoreIndex.from_vector_store(
-        vector_store=vector_store
-    )
+    index = VectorStoreIndex.from_vector_store(vector_store=vector_store)
 
     query = "Write short summary about all this files"
     query_engine = index.as_query_engine()

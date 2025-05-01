@@ -18,44 +18,44 @@ load_dotenv()
 pc = Pinecone(api_key=os.environ["PINECONE_API_KEY"])
 
 if __name__ == "__main__":
-  input_dir = Path("./resume-pdf/")
+    input_dir = Path("./resume-pdf/")
 
-  reader = SimpleDirectoryReader(
-    input_dir=input_dir,
-    recursive=True,
-  )
+    reader = SimpleDirectoryReader(
+        input_dir=input_dir,
+        recursive=True,
+    )
 
-  all_docs = []
-  for docs in reader.iter_data():
-      all_docs.extend(docs)
+    all_docs = []
+    for docs in reader.iter_data():
+        all_docs.extend(docs)
 
-  Settings.llm = OpenAI(model="gpt-3.5-turbo", temperature=0)
-  Settings.embed_model = OpenAIEmbedding(
-      model="text-embedding-ada-002", embed_batch_size=100
-  )
-  Settings.node_parser = SimpleNodeParser.from_defaults(
-      chunk_size=500, chunk_overlap=20
-  )
+    Settings.llm = OpenAI(model="gpt-3.5-turbo", temperature=0)
+    Settings.embed_model = OpenAIEmbedding(
+        model="text-embedding-ada-002", embed_batch_size=100
+    )
+    Settings.node_parser = SimpleNodeParser.from_defaults(
+        chunk_size=500, chunk_overlap=20
+    )
 
-  pc = Pinecone(api_key=os.environ["PINECONE_API_KEY"])
+    pc = Pinecone(api_key=os.environ["PINECONE_API_KEY"])
 
-  index_name = "llanaindex-resume-pdf-helper"
-  pinecone_index = pc.Index("llanaindex-resume-pdf-helper")
+    index_name = "llanaindex-resume-pdf-helper"
+    pinecone_index = pc.Index("llanaindex-resume-pdf-helper")
 
-  vector_store = PineconeVectorStore(pinecone_index=pinecone_index)
-  storage_context = StorageContext.from_defaults(vector_store=vector_store)
+    vector_store = PineconeVectorStore(pinecone_index=pinecone_index)
+    storage_context = StorageContext.from_defaults(vector_store=vector_store)
 
-  index = VectorStoreIndex.from_documents(
-      documents=all_docs,
-      storage_context=storage_context,
-      show_progress=True,
-  )
+    index = VectorStoreIndex.from_documents(
+        documents=all_docs,
+        storage_context=storage_context,
+        show_progress=True,
+    )
 
-  print(f"{os.environ['PINECONE_ENVIRONMENT']}")
+    print(f"{os.environ['PINECONE_ENVIRONMENT']}")
 
-  pass
+    pass
 
-  # for pdf_file in pdf_files:
-  #   for file in pdf_files:
-  #     documents.append(file.name)
-  # print(documents)
+    # for pdf_file in pdf_files:
+    #   for file in pdf_files:
+    #     documents.append(file.name)
+    # print(documents)
